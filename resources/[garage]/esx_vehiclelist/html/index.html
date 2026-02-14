@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Manager</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="vehicle-app" class="hidden">
+        <!-- Header Bar -->
+        <div class="header-bar">
+            <div class="header-left">
+                <span class="header-icon">&#9881;</span>
+                <span class="header-title">VEHICLE MANAGER</span>
+            </div>
+            <div class="header-center">
+                <div class="tab active" data-tab="all">ALL</div>
+                <div class="tab" data-tab="garage">GARAGE</div>
+                <div class="tab" data-tab="out">OUT</div>
+                <div class="tab" data-tab="impound">IMPOUND</div>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search vehicle...">
+                    <span class="search-icon">&#128269;</span>
+                </div>
+                <button class="close-btn" id="close-btn">&times;</button>
+            </div>
+        </div>
+
+        <!-- Main Content - Three Panels -->
+        <div class="main-content">
+            <!-- LEFT PANEL: Vehicle List -->
+            <div class="panel panel-left">
+                <div class="panel-header">
+                    <span class="panel-title">MY VEHICLES</span>
+                    <span class="vehicle-count" id="vehicle-count">0</span>
+                </div>
+                <div class="vehicle-list" id="vehicle-list">
+                    <!-- Vehicle items injected by JS -->
+                </div>
+            </div>
+
+            <!-- CENTER PANEL: Vehicle Preview -->
+            <div class="panel panel-center">
+                <div class="preview-container" id="preview-container">
+                    <div class="no-vehicle-selected" id="no-vehicle-msg">
+                        <div class="no-vehicle-icon">&#128663;</div>
+                        <p>Select a vehicle to preview</p>
+                    </div>
+                    <div class="vehicle-preview hidden" id="vehicle-preview">
+                        <div class="preview-image-wrapper">
+                            <img id="preview-image" src="" alt="Vehicle Preview">
+                        </div>
+                        <div class="preview-name-plate">
+                            <h2 id="preview-name"></h2>
+                            <span class="preview-plate" id="preview-plate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons hidden" id="action-buttons">
+                    <button class="action-btn btn-spawn" id="btn-spawn">
+                        <span class="btn-icon">&#9654;</span>
+                        SPAWN
+                    </button>
+                    <button class="action-btn btn-repair" id="btn-repair">
+                        <span class="btn-icon">&#128295;</span>
+                        REPAIR
+                    </button>
+                    <button class="action-btn btn-transfer" id="btn-transfer">
+                        <span class="btn-icon">&#8644;</span>
+                        TRANSFER
+                    </button>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: Technical Details -->
+            <div class="panel panel-right">
+                <div class="details-container hidden" id="details-container">
+                    <!-- Performance Section -->
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <span class="section-icon">&#9889;</span>
+                            <span class="section-title">PERFORMANCE</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Top Speed</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" id="stat-speed"><span class="stat-value"></span></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Acceleration</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" id="stat-acceleration"><span class="stat-value"></span></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Traction</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" id="stat-traction"><span class="stat-value"></span></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Braking</span>
+                            <div class="stat-bar-container">
+                                <div class="stat-bar" id="stat-braking"><span class="stat-value"></span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Durability Section -->
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <span class="section-icon">&#128736;</span>
+                            <span class="section-title">DURABILITY</span>
+                        </div>
+                        <div class="durability-grid">
+                            <div class="durability-item">
+                                <div class="durability-ring" id="ring-engine">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="ring-fill" id="ring-engine-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    </svg>
+                                    <span class="ring-value" id="val-engine">0%</span>
+                                </div>
+                                <span class="durability-label">Engine</span>
+                            </div>
+                            <div class="durability-item">
+                                <div class="durability-ring" id="ring-body">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="ring-fill" id="ring-body-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    </svg>
+                                    <span class="ring-value" id="val-body">0%</span>
+                                </div>
+                                <span class="durability-label">Body</span>
+                            </div>
+                            <div class="durability-item">
+                                <div class="durability-ring" id="ring-fuel">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="ring-fill" id="ring-fuel-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    </svg>
+                                    <span class="ring-value" id="val-fuel">0%</span>
+                                </div>
+                                <span class="durability-label">Fuel</span>
+                            </div>
+                            <div class="durability-item">
+                                <div class="durability-ring" id="ring-oil">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="ring-fill" id="ring-oil-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                    </svg>
+                                    <span class="ring-value" id="val-oil">0%</span>
+                                </div>
+                                <span class="durability-label">Oil</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cosmetics Section -->
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <span class="section-icon">&#127912;</span>
+                            <span class="section-title">COSMETICS</span>
+                        </div>
+                        <div class="cosmetics-colors">
+                            <div class="color-display">
+                                <span class="color-label">Primary</span>
+                                <div class="color-circle" id="color-primary"></div>
+                            </div>
+                            <div class="color-display">
+                                <span class="color-label">Secondary</span>
+                                <div class="color-circle" id="color-secondary"></div>
+                            </div>
+                        </div>
+                        <div class="mods-list" id="mods-list">
+                            <!-- Mods injected by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No vehicle selected state for right panel -->
+                <div class="no-details" id="no-details">
+                    <p>No vehicle selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
